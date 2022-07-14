@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 
 const Form = () => {
+  const REQUIRED = "Required!";
+  const EMAIL_VALID = "Please enter a vaild email adress";
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -13,20 +15,24 @@ const Form = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .required("Required!")
-        .matches(
-          /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-          "Please enter a vaild email adress"
-        ),
-      title: Yup.string().required("Title is required!"),
-      message: Yup.string().required("Message is required!"),
-      file: Yup.mixed().required("File is required"),
+        .required(REQUIRED)
+        .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, EMAIL_VALID),
+      title: Yup.string().required(REQUIRED),
+      message: Yup.string().required(REQUIRED),
+      file: Yup.mixed().required(REQUIRED),
     }),
     onSubmit: (values, { resetForm }) => {
       alert("Success!");
       resetForm({ values: "" });
       console.log(values);
     },
+    // validate: (values) => {
+    //   const errors = {};
+    //   if (values.title < 1900) {
+    //     errors.title = "No!";
+    //   }
+    //   return errors;
+    // },
   });
   return (
     <div className="container form-mail">
@@ -50,6 +56,7 @@ const Form = () => {
             id="title"
             name="title"
             value={formik.values.title}
+            // validate={formik.handleValidate}
             onChange={formik.handleChange}
           />
           {formik.errors.title && (
